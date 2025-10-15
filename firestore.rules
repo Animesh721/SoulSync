@@ -1,0 +1,63 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper function to check if user belongs to a couple
+    function belongsToCouple(coupleCode) {
+      return request.auth != null &&
+             exists(/databases/$(database)/documents/couples/$(coupleCode));
+    }
+
+    // Couples collection
+    match /couples/{coupleCode} {
+      // Anyone can create a couple
+      allow create: if request.auth != null;
+
+      // Users can read and update their own couple
+      allow read, update: if request.auth != null;
+
+      // No one can delete couples
+      allow delete: if false;
+    }
+
+    // Dates collection
+    match /dates/{dateId} {
+      // Users can create dates if they belong to the couple
+      allow create: if request.auth != null &&
+                      request.resource.data.coupleCode != null;
+
+      // Users can read dates from their couple
+      allow read: if request.auth != null;
+
+      // Users can update and delete dates from their couple
+      allow update, delete: if request.auth != null;
+    }
+
+    // Moods collection
+    match /moods/{moodId} {
+      // Users can create mood entries
+      allow create: if request.auth != null &&
+                      request.resource.data.coupleCode != null;
+
+      // Users can read moods from their couple
+      allow read: if request.auth != null;
+
+      // Users can only update/delete their own moods
+      allow update, delete: if request.auth != null &&
+                              resource.data.userId == request.resource.data.userId;
+    }
+
+    // Bucket List collection
+    match /bucketList/{itemId} {
+      // Users can create bucket list items
+      allow create: if request.auth != null &&
+                      request.resource.data.coupleCode != null;
+
+      // Users can read bucket list items from their couple
+      allow read: if request.auth != null;
+
+      // Users can update and delete bucket list items from their couple
+      allow update, delete: if request.auth != null;
+    }
+  }
+}
