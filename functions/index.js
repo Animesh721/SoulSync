@@ -42,12 +42,18 @@ exports.onDateCreated = functions.firestore
         const notifications = Object.entries(users)
           .filter(([userId]) => userId !== dateData.createdBy)
           .map(([userId, userInfo]) => {
-            return sendDateNotification(
+            const emailPromise = sendDateNotification(
               userInfo.email,
               userInfo.name,
               dateData,
               'request'
             );
+            const pushPromise = sendPushNotification(
+              userInfo.fcmToken,
+              dateData,
+              'request'
+            );
+            return Promise.all([emailPromise, pushPromise]);
           });
 
         await Promise.all(notifications);
@@ -55,12 +61,18 @@ exports.onDateCreated = functions.firestore
       } else {
         // Regular date - send confirmation to both users
         const notifications = Object.entries(users).map(([userId, userInfo]) => {
-          return sendDateNotification(
+          const emailPromise = sendDateNotification(
             userInfo.email,
             userInfo.name,
             dateData,
             'created'
           );
+          const pushPromise = sendPushNotification(
+            userInfo.fcmToken,
+            dateData,
+            'created'
+          );
+          return Promise.all([emailPromise, pushPromise]);
         });
 
         await Promise.all(notifications);
@@ -109,12 +121,19 @@ exports.onDateUpdated = functions.firestore
         const requester = users[afterData.createdBy];
         if (requester) {
           const notificationType = afterData.status === 'scheduled' ? 'accepted' : 'declined';
-          await sendDateNotification(
-            requester.email,
-            requester.name,
-            afterData,
-            notificationType
-          );
+          await Promise.all([
+            sendDateNotification(
+              requester.email,
+              requester.name,
+              afterData,
+              notificationType
+            ),
+            sendPushNotification(
+              requester.fcmToken,
+              afterData,
+              notificationType
+            )
+          ]);
           console.log(`Date ${notificationType} notification sent for date ${dateId}`);
 
           // If accepted, schedule reminder
@@ -177,6 +196,13 @@ exports.sendDateReminders = functions.pubsub
             sendDateNotification(
               userInfo.email,
               userInfo.name,
+              dateData,
+              'reminder'
+            )
+          );
+          reminderPromises.push(
+            sendPushNotification(
+              userInfo.fcmToken,
               dateData,
               'reminder'
             )
@@ -320,6 +346,89 @@ async function sendDateNotification(email, name, dateData, type) {
     if (error.response) {
       console.error(error.response.body);
     }
+  }
+}
+
+/**
+ * Helper function to send push notifications via FCM
+ */
+async function sendPushNotification(fcmToken, dateData, type) {
+  if (!fcmToken) {
+    console.log('No FCM token available for user');
+    return;
+  }
+
+  const dateTime = new Date(dateData.dateTime);
+  const formattedDate = dateTime.toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+  let title, body;
+
+  if (type === 'request') {
+    title = `📬 Date Request from ${dateData.createdByName}`;
+    body = `${dateData.title} • ${formattedDate}`;
+  } else if (type === 'accepted') {
+    title = `✅ Date Request Accepted!`;
+    body = `${dateData.title} is confirmed for ${formattedDate}`;
+  } else if (type === 'declined') {
+    title = `Date Request Update`;
+    body = `Your request for "${dateData.title}" couldn't be accepted`;
+  } else if (type === 'created') {
+    title = `💕 New Date Scheduled`;
+    body = `${dateData.title} • ${formattedDate}`;
+  } else if (type === 'reminder') {
+    title = `⏰ Date in 1 Hour!`;
+    body = `${dateData.title} is happening soon`;
+  }
+
+  const message = {
+    token: fcmToken,
+    notification: {
+      title,
+      body
+    },
+    data: {
+      dateId: dateData.id || '',
+      type: type,
+      click_action: '/'
+    },
+    android: {
+      priority: 'high',
+      notification: {
+        sound: 'default',
+        priority: 'high',
+        channelId: 'date_notifications'
+      }
+    },
+    apns: {
+      payload: {
+        aps: {
+          sound: 'default',
+          badge: 1
+        }
+      }
+    },
+    webpush: {
+      notification: {
+        icon: '/favicon.svg',
+        badge: '/favicon.svg',
+        requireInteraction: true,
+        tag: `date-${dateData.id || 'notification'}`
+      }
+    }
+  };
+
+  try {
+    await admin.messaging().send(message);
+    console.log(`Push notification sent to token ${fcmToken.substring(0, 20)}...`);
+  } catch (error) {
+    console.error('Error sending push notification:', error);
+    // Token might be invalid, but don't fail the entire operation
   }
 }
 

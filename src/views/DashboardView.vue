@@ -10,14 +10,42 @@ const coupleStore = useCoupleStore()
 const datesStore = useDatesStore()
 
 let unsubscribe = null
+let messagingUnsubscribe = null
+const showNotificationBanner = ref(false)
 
-onMounted(() => {
+onMounted(async () => {
   unsubscribe = datesStore.subscribeToDates()
+
+  // Setup foreground message listener
+  messagingUnsubscribe = coupleStore.setupForegroundMessageListener()
+
+  // Check if notifications are supported and not yet granted
+  if ('Notification' in window && Notification.permission === 'default') {
+    showNotificationBanner.value = true
+  }
+
+  // Auto-request notification permission if already linked
+  if (coupleStore.isLinked && Notification.permission === 'default') {
+    // Wait a bit before prompting to avoid overwhelming user on first load
+    setTimeout(() => {
+      requestNotifications()
+    }, 3000)
+  }
 })
 
 onUnmounted(() => {
   if (unsubscribe) unsubscribe()
+  if (messagingUnsubscribe) messagingUnsubscribe()
 })
+
+const requestNotifications = async () => {
+  showNotificationBanner.value = false
+  await coupleStore.requestNotificationPermission()
+}
+
+const dismissNotificationBanner = () => {
+  showNotificationBanner.value = false
+}
 
 const upcomingDates = computed(() => datesStore.getUpcomingDates().slice(0, 3))
 const pendingRequests = computed(() => datesStore.getPendingRequests())
@@ -93,6 +121,35 @@ const logout = () => {
 
 <template>
   <div class="min-h-screen pb-20">
+    <!-- Notification Permission Banner -->
+    <div v-if="showNotificationBanner" class="bg-gradient-to-r from-orange-400 to-amber-500 text-white p-4">
+      <div class="max-w-4xl mx-auto flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          <div>
+            <p class="font-semibold">Enable Push Notifications</p>
+            <p class="text-sm text-white/90">Get instant alerts for date requests and reminders</p>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <button
+            @click="requestNotifications"
+            class="bg-white text-orange-600 hover:bg-orange-50 px-4 py-2 rounded-lg font-medium transition-all"
+          >
+            Enable
+          </button>
+          <button
+            @click="dismissNotificationBanner"
+            class="bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition-all"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Header -->
     <div class="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white p-6">
       <div class="max-w-4xl mx-auto">

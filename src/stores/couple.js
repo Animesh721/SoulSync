@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { db, auth } from '@/firebase/config'
+import { db, auth, messaging } from '@/firebase/config'
 import {
   collection,
   doc,
@@ -10,6 +10,7 @@ import {
   updateDoc,
   onSnapshot
 } from 'firebase/firestore'
+import { getToken, onMessage } from 'firebase/messaging'
 
 export const useCoupleStore = defineStore('couple', () => {
   const coupleCode = ref(localStorage.getItem('coupleCode') || null)
@@ -20,6 +21,8 @@ export const useCoupleStore = defineStore('couple', () => {
   const userTimezone = ref(Intl.DateTimeFormat().resolvedOptions().timeZone)
   const partnerInfo = ref(null)
   const partnerLastSeen = ref(null)
+  const fcmToken = ref(localStorage.getItem('fcmToken') || null)
+  const notificationPermission = ref(Notification.permission)
   const isLinked = computed(() => !!coupleCode.value && !!userId.value)
   const isPartnerOnline = computed(() => {
     if (!partnerLastSeen.value) return false
@@ -213,6 +216,66 @@ export const useCoupleStore = defineStore('couple', () => {
     }
   }
 
+  // Request notification permission and get FCM token
+  const requestNotificationPermission = async () => {
+    if (!messaging) {
+      console.warn('FCM not supported on this browser')
+      return null
+    }
+
+    try {
+      const permission = await Notification.requestPermission()
+      notificationPermission.value = permission
+
+      if (permission === 'granted') {
+        const token = await getToken(messaging, {
+          vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY
+        })
+
+        if (token) {
+          fcmToken.value = token
+          localStorage.setItem('fcmToken', token)
+
+          // Save token to user profile in Firestore
+          if (coupleCode.value && userId.value) {
+            await updateDoc(doc(db, 'couples', coupleCode.value), {
+              [`users.${userId.value}.fcmToken`]: token,
+              [`users.${userId.value}.fcmTokenUpdatedAt`]: new Date().toISOString()
+            })
+          }
+
+          console.log('FCM token saved:', token)
+          return token
+        }
+      } else {
+        console.log('Notification permission denied')
+        return null
+      }
+    } catch (error) {
+      console.error('Error getting FCM token:', error)
+      return null
+    }
+  }
+
+  // Listen for foreground messages
+  const setupForegroundMessageListener = () => {
+    if (!messaging) return null
+
+    return onMessage(messaging, (payload) => {
+      console.log('Foreground message received:', payload)
+
+      // Show notification using browser Notification API
+      if (Notification.permission === 'granted') {
+        new Notification(payload.notification?.title || 'SoulSync', {
+          body: payload.notification?.body || 'You have a new notification',
+          icon: '/favicon.svg',
+          tag: payload.data?.dateId || 'soulsync-notification',
+          requireInteraction: true
+        })
+      }
+    })
+  }
+
   // Logout
   const logout = () => {
     coupleCode.value = null
@@ -264,12 +327,16 @@ export const useCoupleStore = defineStore('couple', () => {
     userTimezone,
     partnerInfo,
     partnerLastSeen,
+    fcmToken,
+    notificationPermission,
     isLinked,
     isPartnerOnline,
     createCoupleCode,
     joinCoupleCode,
     recoverAccount,
     subscribeToPartner,
+    requestNotificationPermission,
+    setupForegroundMessageListener,
     logout
   }
 })
