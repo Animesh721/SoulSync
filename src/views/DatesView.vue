@@ -89,7 +89,7 @@ const deleteDate = async (dateId) => {
 <template>
   <div class="min-h-screen pb-20">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white p-6">
+    <div class="bg-[#4A4A4A] text-white p-6">
       <div class="max-w-4xl mx-auto flex justify-between items-center">
         <div>
           <button
@@ -102,7 +102,7 @@ const deleteDate = async (dateId) => {
         </div>
         <button
           @click="router.push('/dates/new')"
-          class="bg-white text-purple-600 px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
+          class="bg-white text-[#00BFAF] px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
         >
           + New Date
         </button>
@@ -114,13 +114,13 @@ const deleteDate = async (dateId) => {
       <div class="bg-white rounded-2xl p-2 shadow-md inline-flex gap-2">
         <button
           @click="activeTab = 'upcoming'"
-          :class="['px-6 py-2 rounded-xl font-medium transition-all', activeTab === 'upcoming' ? 'bg-purple-500 text-white' : 'text-gray-600 hover:bg-gray-100']"
+          :class="['px-6 py-2 rounded-xl font-medium transition-all', activeTab === 'upcoming' ? 'bg-[#00BFAF] text-white' : 'text-gray-600 hover:bg-gray-100']"
         >
           Upcoming ({{ upcomingDates.length }})
         </button>
         <button
           @click="activeTab = 'past'"
-          :class="['px-6 py-2 rounded-xl font-medium transition-all', activeTab === 'past' ? 'bg-purple-500 text-white' : 'text-gray-600 hover:bg-gray-100']"
+          :class="['px-6 py-2 rounded-xl font-medium transition-all', activeTab === 'past' ? 'bg-[#00BFAF] text-white' : 'text-gray-600 hover:bg-gray-100']"
         >
           Past ({{ pastDates.length }})
         </button>
@@ -142,7 +142,7 @@ const deleteDate = async (dateId) => {
 
             <div class="flex-1">
               <div class="flex justify-between items-start mb-2">
-                <h3 class="text-xl font-bold text-gray-800">{{ date.title }}</h3>
+                <h3 class="text-xl font-bold text-[#4A4A4A]">{{ date.title }}</h3>
                 <button
                   @click="deleteDate(date.id)"
                   class="text-gray-400 hover:text-red-500 text-sm"
@@ -151,7 +151,7 @@ const deleteDate = async (dateId) => {
                 </button>
               </div>
 
-              <div class="space-y-1 text-sm text-gray-600 mb-3">
+              <div class="space-y-1 text-sm text-[#9E9E9E] mb-3">
                 <p>📅 {{ formatDate(date.dateTime) }}</p>
                 <p v-if="date.type === 'surprise' && date.createdBy !== coupleStore.userId">
                   🎁 Surprise date planned by {{ date.createdByName }}
@@ -182,7 +182,7 @@ const deleteDate = async (dateId) => {
                 <button
                   v-if="!hasLoggedMood(date.id)"
                   @click="openMoodModal(date)"
-                  class="bg-purple-100 text-purple-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-200 transition-all"
+                  class="bg-[#E0F7F5] text-[#00BFAF] px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#B2EBE6] transition-all"
                 >
                   How did it feel? ✨
                 </button>
@@ -203,7 +203,7 @@ const deleteDate = async (dateId) => {
         <button
           v-if="activeTab === 'upcoming'"
           @click="router.push('/dates/new')"
-          class="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-8 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
+          class="bg-[#00BFAF] text-white px-8 py-3 rounded-xl font-semibold hover:shadow-lg hover:bg-[#009688] transition-all"
         >
           Schedule a Date
         </button>
@@ -217,15 +217,15 @@ const deleteDate = async (dateId) => {
       @click.self="showMoodModal = false"
     >
       <div class="bg-white rounded-3xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">How did it feel?</h2>
-        <p class="text-gray-600 mb-6">Share how this date made you feel</p>
+        <h2 class="text-2xl font-bold text-[#4A4A4A] mb-4">How did it feel?</h2>
+        <p class="text-[#9E9E9E] mb-6">Share how this date made you feel</p>
 
         <div class="grid grid-cols-2 gap-3 mb-6">
           <button
             v-for="mood in moodsStore.moodOptions"
             :key="mood.value"
             @click="selectedMood = mood.value"
-            :class="['p-4 rounded-xl border-2 transition-all', selectedMood === mood.value ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-gray-300']"
+            :class="['p-4 rounded-xl border-2 transition-all', selectedMood === mood.value ? 'border-[#00BFAF] bg-[#E0F7F5]' : 'border-gray-200 hover:border-gray-300']"
           >
             <div class="text-3xl mb-1">{{ mood.icon }}</div>
             <div class="text-sm font-medium">{{ mood.label }}</div>
@@ -233,12 +233,12 @@ const deleteDate = async (dateId) => {
         </div>
 
         <div class="mb-6">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Notes (optional)</label>
+          <label class="block text-sm font-medium text-[#4A4A4A] mb-2">Notes (optional)</label>
           <textarea
             v-model="moodNotes"
             rows="3"
             placeholder="Any thoughts about this date..."
-            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none resize-none"
+            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#00BFAF] focus:border-transparent outline-none resize-none"
           ></textarea>
         </div>
 
@@ -252,7 +252,7 @@ const deleteDate = async (dateId) => {
           <button
             @click="submitMood"
             :disabled="!selectedMood"
-            :class="['flex-1 py-3 rounded-xl font-semibold transition-all', selectedMood ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:shadow-lg' : 'bg-gray-300 text-gray-500 cursor-not-allowed']"
+            :class="['flex-1 py-3 rounded-xl font-semibold transition-all', selectedMood ? 'bg-[#00BFAF] text-white hover:shadow-lg hover:bg-[#009688]' : 'bg-gray-300 text-gray-500 cursor-not-allowed']"
           >
             Save Mood
           </button>

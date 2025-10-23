@@ -57,7 +57,7 @@ const getMinDateTime = () => {
 <template>
   <div class="min-h-screen pb-20">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white p-6">
+    <div class="bg-[#4A4A4A] text-white p-6">
       <div class="max-w-2xl mx-auto">
         <button
           @click="router.push('/dates')"
@@ -75,33 +75,33 @@ const getMinDateTime = () => {
       <div class="bg-white rounded-3xl p-8 shadow-lg space-y-6">
         <!-- Title -->
         <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
+          <label class="block text-sm font-semibold text-[#4A4A4A] mb-2">
             Date Title <span class="text-red-500">*</span>
           </label>
           <input
             v-model="title"
             type="text"
             placeholder="e.g., Movie Night, Deep Conversation..."
-            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#00BFAF] focus:border-transparent outline-none"
           />
         </div>
 
         <!-- Date & Time -->
         <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
+          <label class="block text-sm font-semibold text-[#4A4A4A] mb-2">
             Date & Time <span class="text-red-500">*</span>
           </label>
           <input
             v-model="dateTime"
             type="datetime-local"
             :min="getMinDateTime()"
-            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#00BFAF] focus:border-transparent outline-none"
           />
         </div>
 
         <!-- Type -->
         <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-3">
+          <label class="block text-sm font-semibold text-[#4A4A4A] mb-3">
             Date Type <span class="text-red-500">*</span>
           </label>
           <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -109,35 +109,35 @@ const getMinDateTime = () => {
               v-for="dateType in datesStore.dateTypes"
               :key="dateType.value"
               @click="type = dateType.value"
-              :class="['p-4 rounded-xl border-2 transition-all text-left', type === dateType.value ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-gray-300']"
+              :class="['p-4 rounded-xl border-2 transition-all text-left', type === dateType.value ? 'border-[#00BFAF] bg-[#E0F7F5]' : 'border-gray-200 hover:border-gray-300']"
             >
               <div class="text-2xl mb-1">{{ dateType.icon }}</div>
-              <div class="text-sm font-medium text-gray-800">{{ dateType.label }}</div>
+              <div class="text-sm font-medium text-[#4A4A4A]">{{ dateType.label }}</div>
             </button>
           </div>
         </div>
 
         <!-- Notes -->
         <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
+          <label class="block text-sm font-semibold text-[#4A4A4A] mb-2">
             Notes (Optional)
           </label>
           <textarea
             v-model="notes"
             rows="4"
             placeholder="Any special plans or ideas for this date..."
-            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none resize-none"
+            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#00BFAF] focus:border-transparent outline-none resize-none"
           ></textarea>
         </div>
 
         <!-- Request Toggle -->
-        <div class="bg-purple-50 rounded-xl p-4 border border-purple-200">
+        <div class="bg-[#E0F7F5] rounded-xl p-4 border border-[#00BFAF]">
           <label class="flex items-center justify-between cursor-pointer">
             <div>
-              <div class="font-semibold text-gray-800 mb-1">
+              <div class="font-semibold text-[#4A4A4A] mb-1">
                 📬 Send as Request
               </div>
-              <div class="text-sm text-gray-600">
+              <div class="text-sm text-[#9E9E9E]">
                 Your partner will need to accept this date before it's scheduled
               </div>
             </div>
@@ -148,7 +148,7 @@ const getMinDateTime = () => {
                 class="sr-only peer"
               />
               <div
-                class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"
+                class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#00BFAF]/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00BFAF]"
               ></div>
             </div>
           </label>
@@ -170,7 +170,7 @@ const getMinDateTime = () => {
           </button>
           <button
             @click="createDate"
-            class="flex-1 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white py-4 rounded-xl font-semibold hover:shadow-lg transition-all"
+            class="flex-1 bg-[#00BFAF] text-white py-4 rounded-xl font-semibold hover:shadow-lg hover:bg-[#009688] transition-all"
             :disabled="loading"
           >
             {{ loading ? (sendAsRequest ? 'Sending Request...' : 'Creating...') : (sendAsRequest ? 'Send Request' : 'Create Date') }}

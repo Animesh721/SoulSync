@@ -151,7 +151,7 @@ const logout = () => {
     </div>
 
     <!-- Header -->
-    <div class="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white p-6">
+    <div class="bg-[#4A4A4A] text-white p-6">
       <div class="max-w-4xl mx-auto">
         <div class="flex justify-between items-start mb-6">
           <div>
@@ -198,7 +198,7 @@ const logout = () => {
           class="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all text-center"
         >
           <div class="text-4xl mb-2">📅</div>
-          <p class="font-semibold text-gray-800">New Date</p>
+          <p class="font-semibold text-[#4A4A4A]">New Date</p>
         </button>
 
         <button
@@ -206,7 +206,7 @@ const logout = () => {
           class="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all text-center"
         >
           <div class="text-4xl mb-2">💕</div>
-          <p class="font-semibold text-gray-800">All Dates</p>
+          <p class="font-semibold text-[#4A4A4A]">All Dates</p>
         </button>
 
         <button
@@ -214,7 +214,7 @@ const logout = () => {
           class="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all text-center"
         >
           <div class="text-4xl mb-2">🎯</div>
-          <p class="font-semibold text-gray-800">Bucket List</p>
+          <p class="font-semibold text-[#4A4A4A]">Bucket List</p>
         </button>
       </div>
 
@@ -253,7 +253,7 @@ const logout = () => {
               </button>
               <button
                 @click="acceptRequest(request.id)"
-                class="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
+                class="flex-1 bg-[#00BFAF] text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:bg-[#009688] transition-all"
               >
                 ✓ Accept
               </button>
@@ -340,7 +340,7 @@ const logout = () => {
           <h2 class="text-2xl font-bold text-gray-800">Upcoming Dates</h2>
           <button
             @click="router.push('/dates')"
-            class="text-purple-600 hover:text-purple-700 text-sm font-medium"
+            class="text-[#00BFAF] hover:text-[#009688] text-sm font-medium"
           >
             View All →
           </button>
@@ -350,16 +350,16 @@ const logout = () => {
           <div
             v-for="date in upcomingDates"
             :key="date.id"
-            class="border border-gray-200 rounded-xl p-4 hover:border-purple-300 transition-all"
+            class="border border-gray-200 rounded-xl p-4 hover:border-[#00BFAF] transition-all"
           >
             <div class="flex items-start gap-3">
               <div :class="['text-2xl p-2 rounded-lg', getDateTypeInfo(date.type).color]">
                 {{ getDateTypeInfo(date.type).icon }}
               </div>
               <div class="flex-1">
-                <h3 class="font-semibold text-gray-800">{{ date.title }}</h3>
-                <p class="text-sm text-gray-600">{{ formatDate(date.dateTime) }}</p>
-                <p class="text-xs text-purple-600 font-medium mt-1">In {{ getTimeUntil(date.dateTime) }}</p>
+                <h3 class="font-semibold text-[#4A4A4A]">{{ date.title }}</h3>
+                <p class="text-sm text-[#9E9E9E]">{{ formatDate(date.dateTime) }}</p>
+                <p class="text-xs text-[#00BFAF] font-medium mt-1">In {{ getTimeUntil(date.dateTime) }}</p>
 
                 <!-- Calendar buttons -->
                 <div class="flex gap-2 mt-3">
@@ -387,7 +387,7 @@ const logout = () => {
           <p>No upcoming dates scheduled</p>
           <button
             @click="router.push('/dates/new')"
-            class="mt-4 text-purple-600 hover:text-purple-700 font-medium"
+            class="mt-4 text-[#00BFAF] hover:text-[#009688] font-medium"
           >
             Schedule your first date →
           </button>

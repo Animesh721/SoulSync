@@ -1,15 +1,7 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const sgMail = require('@sendgrid/mail');
 
 admin.initializeApp();
-
-// Initialize SendGrid with your API key
-// Set this in Firebase Functions config: firebase functions:config:set sendgrid.key="YOUR_API_KEY"
-const SENDGRID_API_KEY = functions.config().sendgrid?.key;
-if (SENDGRID_API_KEY) {
-  sgMail.setApiKey(SENDGRID_API_KEY);
-}
 
 /**
  * Trigger: When a new date is created
@@ -226,127 +218,11 @@ exports.sendDateReminders = functions.pubsub
   });
 
 /**
- * Helper function to send email notifications
+ * Helper function to send email notifications (not implemented)
  */
 async function sendDateNotification(email, name, dateData, type) {
-  if (!SENDGRID_API_KEY) {
-    console.warn('SendGrid API key not configured. Skipping email notification.');
-    return;
-  }
-
-  const dateTime = new Date(dateData.dateTime);
-  const formattedDate = dateTime.toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
-
-  let subject, text, html;
-
-  if (type === 'request') {
-    subject = `📬 Date Request from ${dateData.createdByName}: ${dateData.title}`;
-    text = `Hi ${name},\n\n${dateData.createdByName} would like to schedule a date with you!\n\nTitle: ${dateData.title}\nDate & Time: ${formattedDate}\n${dateData.notes ? `\nMessage: ${dateData.notes}` : ''}\n\nLog in to accept or decline this request.\n\nWith love,\nSoulSync`;
-    html = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #f59e0b;">📬 You Have a Date Request!</h2>
-        <p>Hi ${name},</p>
-        <p><strong>${dateData.createdByName}</strong> would like to schedule a date with you!</p>
-        <div style="background: #fef3c7; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #f59e0b;">
-          <h3 style="margin-top: 0;">${dateData.title}</h3>
-          <p><strong>📅 Date & Time:</strong> ${formattedDate}</p>
-          ${dateData.notes ? `<p style="font-style: italic; color: #6b7280;">"${dateData.notes}"</p>` : ''}
-        </div>
-        <p>Log in to your app to <strong>accept or decline</strong> this request.</p>
-        <p style="color: #6b7280; margin-top: 30px;">With love,<br>SoulSync</p>
-      </div>
-    `;
-  } else if (type === 'accepted') {
-    subject = `✅ Date Request Accepted: ${dateData.title}`;
-    text = `Hi ${name},\n\nGreat news! Your date request has been accepted!\n\nTitle: ${dateData.title}\nDate & Time: ${formattedDate}\n\nYour partner is looking forward to it!\n\nWith love,\nSoulSync`;
-    html = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #10b981;">✅ Date Request Accepted!</h2>
-        <p>Hi ${name},</p>
-        <p>Great news! Your date request has been <strong>accepted</strong>!</p>
-        <div style="background: #d1fae5; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #10b981;">
-          <h3 style="margin-top: 0;">${dateData.title}</h3>
-          <p><strong>📅 Date & Time:</strong> ${formattedDate}</p>
-        </div>
-        <p>Your partner is looking forward to spending quality time with you!</p>
-        <p style="color: #6b7280; margin-top: 30px;">With love,<br>SoulSync</p>
-      </div>
-    `;
-  } else if (type === 'declined') {
-    subject = `Date Request Update: ${dateData.title}`;
-    text = `Hi ${name},\n\nYour date request couldn't be accepted this time.\n\nTitle: ${dateData.title}\nDate & Time: ${formattedDate}\n${dateData.declineReason ? `\nReason: ${dateData.declineReason}` : ''}\n\nDon't worry - try suggesting another time that works better!\n\nWith love,\nSoulSync`;
-    html = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #6b7280;">Date Request Update</h2>
-        <p>Hi ${name},</p>
-        <p>Your date request couldn't be accepted this time.</p>
-        <div style="background: #f3f4f6; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #6b7280;">
-          <h3 style="margin-top: 0;">${dateData.title}</h3>
-          <p><strong>📅 Proposed Time:</strong> ${formattedDate}</p>
-          ${dateData.declineReason ? `<p style="font-style: italic; color: #6b7280;"><strong>Reason:</strong> ${dateData.declineReason}</p>` : ''}
-        </div>
-        <p>Don't worry - try suggesting another time that works better for both of you!</p>
-        <p style="color: #6b7280; margin-top: 30px;">With love,<br>SoulSync</p>
-      </div>
-    `;
-  } else if (type === 'created') {
-    subject = `💕 New Date Scheduled: ${dateData.title}`;
-    text = `Hi ${name},\n\nA new date has been scheduled!\n\nTitle: ${dateData.title}\nDate & Time: ${formattedDate}\n\nLog in to see more details.\n\nWith love,\nSoulSync`;
-    html = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #a855f7;">💕 New Date Scheduled</h2>
-        <p>Hi ${name},</p>
-        <p>A new date has been scheduled!</p>
-        <div style="background: #f3f4f6; padding: 20px; border-radius: 10px; margin: 20px 0;">
-          <h3 style="margin-top: 0;">${dateData.title}</h3>
-          <p><strong>📅 Date & Time:</strong> ${formattedDate}</p>
-        </div>
-        <p>Log in to see more details and get ready for quality time together!</p>
-        <p style="color: #6b7280; margin-top: 30px;">With love,<br>SoulSync</p>
-      </div>
-    `;
-  } else if (type === 'reminder') {
-    subject = `⏰ Reminder: Your date is in 1 hour!`;
-    text = `Hi ${name},\n\nYour date "${dateData.title}" is happening in about 1 hour!\n\nDate & Time: ${formattedDate}\n\nGet ready to connect with your partner!\n\nWith love,\nSoulSync`;
-    html = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #a855f7;">⏰ Date Reminder</h2>
-        <p>Hi ${name},</p>
-        <p>Your date is happening in about <strong>1 hour</strong>!</p>
-        <div style="background: #fef3c7; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #f59e0b;">
-          <h3 style="margin-top: 0;">${dateData.title}</h3>
-          <p><strong>📅 Date & Time:</strong> ${formattedDate}</p>
-        </div>
-        <p>Get ready to connect with your partner and make beautiful memories!</p>
-        <p style="color: #6b7280; margin-top: 30px;">With love,<br>SoulSync</p>
-      </div>
-    `;
-  }
-
-  const msg = {
-    to: email,
-    from: 'noreply@soulsync.app', // Change this to your verified sender
-    subject,
-    text,
-    html
-  };
-
-  try {
-    await sgMail.send(msg);
-    console.log(`Email sent to ${email}`);
-  } catch (error) {
-    console.error('Error sending email:', error);
-    if (error.response) {
-      console.error(error.response.body);
-    }
-  }
+  // Email notifications not implemented - push notifications only
+  return;
 }
 
 /**

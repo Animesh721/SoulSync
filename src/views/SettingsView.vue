@@ -35,13 +35,13 @@ const formatLastSeen = (lastSeen) => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 p-4">
+  <div class="min-h-screen bg-gradient-to-br from-gray-100 via-gray-50 to-white p-4">
     <div class="max-w-2xl mx-auto py-8">
       <!-- Header -->
       <div class="flex items-center justify-between mb-8">
         <div>
-          <h1 class="text-3xl font-bold text-gray-800">Settings</h1>
-          <p class="text-gray-600">Manage your account</p>
+          <h1 class="text-3xl font-bold text-[#4A4A4A]">Settings</h1>
+          <p class="text-[#9E9E9E]">Manage your account</p>
         </div>
         <button
           @click="router.push('/dashboard')"
@@ -55,9 +55,9 @@ const formatLastSeen = (lastSeen) => {
 
       <div class="space-y-4">
         <!-- Your Info Card -->
-        <div class="bg-white/80 backdrop-blur rounded-2xl p-6 shadow-lg">
-          <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="bg-white backdrop-blur rounded-2xl p-6 shadow-lg">
+          <h2 class="text-xl font-bold text-[#4A4A4A] mb-4 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-[#00BFAF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
             Your Information
@@ -65,26 +65,26 @@ const formatLastSeen = (lastSeen) => {
 
           <div class="space-y-3">
             <div>
-              <label class="text-sm font-medium text-gray-500">Name</label>
-              <p class="text-lg text-gray-800 font-semibold">{{ coupleStore.userName }}</p>
+              <label class="text-sm font-medium text-[#9E9E9E]">Name</label>
+              <p class="text-lg text-[#4A4A4A] font-semibold">{{ coupleStore.userName }}</p>
             </div>
 
             <div>
-              <label class="text-sm font-medium text-gray-500">Email</label>
-              <p class="text-lg text-gray-800 font-semibold">{{ coupleStore.userEmail }}</p>
+              <label class="text-sm font-medium text-[#9E9E9E]">Email</label>
+              <p class="text-lg text-[#4A4A4A] font-semibold">{{ coupleStore.userEmail }}</p>
             </div>
 
             <div>
-              <label class="text-sm font-medium text-gray-500">Timezone</label>
-              <p class="text-lg text-gray-800 font-semibold">{{ coupleStore.userTimezone }}</p>
+              <label class="text-sm font-medium text-[#9E9E9E]">Timezone</label>
+              <p class="text-lg text-[#4A4A4A] font-semibold">{{ coupleStore.userTimezone }}</p>
             </div>
           </div>
         </div>
 
         <!-- Partner Info Card -->
-        <div v-if="coupleStore.partnerInfo" class="bg-white/80 backdrop-blur rounded-2xl p-6 shadow-lg">
-          <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div v-if="coupleStore.partnerInfo" class="bg-white backdrop-blur rounded-2xl p-6 shadow-lg">
+          <h2 class="text-xl font-bold text-[#4A4A4A] mb-4 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-[#00BFAF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
             Partner Information
@@ -92,36 +92,36 @@ const formatLastSeen = (lastSeen) => {
 
           <div class="space-y-3">
             <div>
-              <label class="text-sm font-medium text-gray-500">Name</label>
-              <p class="text-lg text-gray-800 font-semibold">{{ coupleStore.partnerInfo.name }}</p>
+              <label class="text-sm font-medium text-[#9E9E9E]">Name</label>
+              <p class="text-lg text-[#4A4A4A] font-semibold">{{ coupleStore.partnerInfo.name }}</p>
             </div>
 
             <div>
-              <label class="text-sm font-medium text-gray-500">Email</label>
-              <p class="text-lg text-gray-800 font-semibold">{{ coupleStore.partnerInfo.email }}</p>
+              <label class="text-sm font-medium text-[#9E9E9E]">Email</label>
+              <p class="text-lg text-[#4A4A4A] font-semibold">{{ coupleStore.partnerInfo.email }}</p>
             </div>
 
             <div>
-              <label class="text-sm font-medium text-gray-500">Status</label>
+              <label class="text-sm font-medium text-[#9E9E9E]">Status</label>
               <div class="flex items-center gap-2">
                 <div :class="coupleStore.isPartnerOnline ? 'bg-green-500' : 'bg-gray-400'" class="w-3 h-3 rounded-full"></div>
-                <p class="text-lg text-gray-800 font-semibold">
+                <p class="text-lg text-[#4A4A4A] font-semibold">
                   {{ coupleStore.isPartnerOnline ? 'Online' : 'Offline' }}
                 </p>
               </div>
             </div>
 
             <div>
-              <label class="text-sm font-medium text-gray-500">Last Seen</label>
-              <p class="text-lg text-gray-800 font-semibold">{{ formatLastSeen(coupleStore.partnerLastSeen) }}</p>
+              <label class="text-sm font-medium text-[#9E9E9E]">Last Seen</label>
+              <p class="text-lg text-[#4A4A4A] font-semibold">{{ formatLastSeen(coupleStore.partnerLastSeen) }}</p>
             </div>
           </div>
         </div>
 
         <!-- Couple Code Card -->
-        <div class="bg-white/80 backdrop-blur rounded-2xl p-6 shadow-lg">
-          <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="bg-white backdrop-blur rounded-2xl p-6 shadow-lg">
+          <h2 class="text-xl font-bold text-[#4A4A4A] mb-4 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-[#00BFAF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
             Access Codes
@@ -129,21 +129,21 @@ const formatLastSeen = (lastSeen) => {
 
           <div class="space-y-4">
             <div>
-              <label class="text-sm font-medium text-gray-500">Couple Code</label>
+              <label class="text-sm font-medium text-[#9E9E9E]">Couple Code</label>
               <div class="flex items-center gap-2 mt-1">
-                <p class="text-2xl text-purple-600 font-bold font-mono">{{ coupleStore.coupleCode }}</p>
+                <p class="text-2xl text-[#00BFAF] font-bold font-mono">{{ coupleStore.coupleCode }}</p>
                 <button
                   @click="copyToClipboard(coupleStore.coupleCode)"
-                  class="bg-purple-100 text-purple-600 px-3 py-1 rounded-lg text-sm font-semibold hover:bg-purple-200 transition-all"
+                  class="bg-[#E0F7F5] text-[#00BFAF] px-3 py-1 rounded-lg text-sm font-semibold hover:bg-[#B2EBE6] transition-all"
                 >
                   Copy
                 </button>
               </div>
-              <p class="text-xs text-gray-500 mt-1">Share this with your partner to connect</p>
+              <p class="text-xs text-[#9E9E9E] mt-1">Share this with your partner to connect</p>
             </div>
 
             <div class="border-t border-gray-200 pt-4">
-              <label class="text-sm font-medium text-gray-500">Recovery Code</label>
+              <label class="text-sm font-medium text-[#9E9E9E]">Recovery Code</label>
               <div v-if="!showRecoveryCode" class="mt-2">
                 <button
                   @click="showRecoveryCode = true"
@@ -151,7 +151,7 @@ const formatLastSeen = (lastSeen) => {
                 >
                   Show Recovery Code
                 </button>
-                <p class="text-xs text-gray-500 mt-2">⚠️ Keep this safe! Use it to restore access if logged out</p>
+                <p class="text-xs text-[#9E9E9E] mt-2">⚠️ Keep this safe! Use it to restore access if logged out</p>
               </div>
               <div v-else class="mt-2 bg-orange-50 p-4 rounded-xl border-2 border-orange-200">
                 <div class="flex items-center gap-2 mb-2">

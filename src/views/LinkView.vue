@@ -87,24 +87,24 @@ const copyCode = (code) => {
 <template>
   <div class="min-h-screen flex items-center justify-center p-4">
     <div class="max-w-md w-full">
-      <div class="bg-white/80 backdrop-blur rounded-3xl p-8 shadow-2xl space-y-6">
+      <div class="bg-white backdrop-blur rounded-3xl p-8 shadow-2xl space-y-6">
         <div class="text-center space-y-2">
-          <h2 class="text-3xl font-bold text-gray-800">Connect with Your Partner</h2>
-          <p class="text-gray-600">Start your journey together</p>
+          <h2 class="text-3xl font-bold text-[#4A4A4A]">Connect with Your Partner</h2>
+          <p class="text-[#9E9E9E]">Start your journey together</p>
         </div>
 
         <!-- Mode Selection -->
         <div v-if="mode === 'select'" class="space-y-4">
           <button
             @click="mode = 'create'"
-            class="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-4 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all"
+            class="w-full bg-[#00BFAF] text-white py-4 rounded-xl font-semibold hover:shadow-lg hover:bg-[#009688] transform hover:scale-105 transition-all"
           >
             Create New Couple Code
           </button>
 
           <button
             @click="mode = 'join'"
-            class="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white py-4 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all"
+            class="w-full bg-[#4A4A4A] text-white py-4 rounded-xl font-semibold hover:shadow-lg hover:bg-[#212121] transform hover:scale-105 transition-all"
           >
             Join with Existing Code
           </button>
@@ -122,22 +122,22 @@ const copyCode = (code) => {
         <!-- Create Mode -->
         <div v-if="mode === 'create' && !generatedCode" class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Your Email</label>
+            <label class="block text-sm font-medium text-[#4A4A4A] mb-2">Your Email</label>
             <input
               v-model="email"
               type="email"
               placeholder="you@example.com"
-              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#00BFAF] focus:border-transparent outline-none"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
+            <label class="block text-sm font-medium text-[#4A4A4A] mb-2">Your Name</label>
             <input
               v-model="name"
               type="text"
               placeholder="Your name"
-              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#00BFAF] focus:border-transparent outline-none"
             />
           </div>
 
@@ -155,7 +155,7 @@ const copyCode = (code) => {
             </button>
             <button
               @click="createCouple"
-              class="flex-1 bg-gradient-to-r from-pink-500 to-purple-500 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
+              class="flex-1 bg-[#00BFAF] text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:bg-[#009688] transition-all"
               :disabled="loading"
             >
               {{ loading ? 'Creating...' : 'Create Code' }}
@@ -165,12 +165,12 @@ const copyCode = (code) => {
 
         <!-- Generated Code Display -->
         <div v-if="generatedCode" class="space-y-4 text-center">
-          <div class="bg-gradient-to-br from-pink-100 to-purple-100 p-6 rounded-2xl">
-            <p class="text-sm text-gray-600 mb-2">Your Couple Code</p>
-            <p class="text-3xl font-bold text-purple-600 mb-4">{{ generatedCode }}</p>
+          <div class="bg-gradient-to-br from-[#E0F7F5] to-[#B2EBE6] p-6 rounded-2xl">
+            <p class="text-sm text-[#4A4A4A] mb-2">Your Couple Code</p>
+            <p class="text-3xl font-bold text-[#00BFAF] mb-4">{{ generatedCode }}</p>
             <button
               @click="copyCode(generatedCode)"
-              class="bg-white text-purple-600 px-6 py-2 rounded-lg font-semibold hover:shadow-md transition-all"
+              class="bg-white text-[#00BFAF] px-6 py-2 rounded-lg font-semibold hover:shadow-md transition-all"
             >
               Copy Code
             </button>
@@ -188,39 +188,39 @@ const copyCode = (code) => {
             <p class="text-xs text-orange-700">Use this to restore access if you get logged out!</p>
           </div>
 
-          <p class="text-sm text-gray-600">Share the couple code with your partner so they can join!</p>
-          <p class="text-xs text-gray-500">Redirecting to dashboard...</p>
+          <p class="text-sm text-[#9E9E9E]">Share the couple code with your partner so they can join!</p>
+          <p class="text-xs text-[#9E9E9E]">Redirecting to dashboard...</p>
         </div>
 
         <!-- Join Mode -->
         <div v-if="mode === 'join'" class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Couple Code</label>
+            <label class="block text-sm font-medium text-[#4A4A4A] mb-2">Couple Code</label>
             <input
               v-model="joinCode"
               type="text"
               placeholder="SWEETHEARTS123"
-              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none uppercase"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#00BFAF] focus:border-transparent outline-none uppercase"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Your Email</label>
+            <label class="block text-sm font-medium text-[#4A4A4A] mb-2">Your Email</label>
             <input
               v-model="email"
               type="email"
               placeholder="you@example.com"
-              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#00BFAF] focus:border-transparent outline-none"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
+            <label class="block text-sm font-medium text-[#4A4A4A] mb-2">Your Name</label>
             <input
               v-model="name"
               type="text"
               placeholder="Your name"
-              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#00BFAF] focus:border-transparent outline-none"
             />
           </div>
 
@@ -238,7 +238,7 @@ const copyCode = (code) => {
             </button>
             <button
               @click="joinCouple"
-              class="flex-1 bg-gradient-to-r from-purple-500 to-blue-500 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
+              class="flex-1 bg-[#4A4A4A] text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:bg-[#212121] transition-all"
               :disabled="loading"
             >
               {{ loading ? 'Joining...' : 'Join' }}
@@ -248,27 +248,27 @@ const copyCode = (code) => {
 
         <!-- Recover Mode -->
         <div v-if="mode === 'recover'" class="space-y-4">
-          <div class="bg-blue-50 p-4 rounded-xl mb-4">
-            <p class="text-sm text-blue-800">Enter your recovery code and email to restore your account access.</p>
+          <div class="bg-[#E0F7F5] p-4 rounded-xl mb-4">
+            <p class="text-sm text-[#4A4A4A]">Enter your recovery code and email to restore your account access.</p>
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Recovery Code</label>
+            <label class="block text-sm font-medium text-[#4A4A4A] mb-2">Recovery Code</label>
             <input
               v-model="recoveryCodeInput"
               type="text"
               placeholder="XXXX-XXXX-XXXX-XXXX"
-              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none uppercase"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#00BFAF] focus:border-transparent outline-none uppercase"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Your Email</label>
+            <label class="block text-sm font-medium text-[#4A4A4A] mb-2">Your Email</label>
             <input
               v-model="email"
               type="email"
               placeholder="you@example.com"
-              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#00BFAF] focus:border-transparent outline-none"
             />
           </div>
 
@@ -286,7 +286,7 @@ const copyCode = (code) => {
             </button>
             <button
               @click="recoverAccount"
-              class="flex-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
+              class="flex-1 bg-[#00BFAF] text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:bg-[#009688] transition-all"
               :disabled="loading"
             >
               {{ loading ? 'Recovering...' : 'Recover Account' }}

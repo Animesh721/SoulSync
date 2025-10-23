@@ -100,7 +100,7 @@ const getPriorityInfo = (priorityValue) => {
 <template>
   <div class="min-h-screen pb-20">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white p-6">
+    <div class="bg-[#4A4A4A] text-white p-6">
       <div class="max-w-4xl mx-auto flex justify-between items-center">
         <div>
           <button
@@ -114,7 +114,7 @@ const getPriorityInfo = (priorityValue) => {
         </div>
         <button
           @click="openModal"
-          class="bg-white text-purple-600 px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
+          class="bg-white text-[#00BFAF] px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
         >
           + Add Item
         </button>
@@ -126,13 +126,13 @@ const getPriorityInfo = (priorityValue) => {
       <div class="bg-white rounded-2xl p-2 shadow-md inline-flex gap-2">
         <button
           @click="activeTab = 'active'"
-          :class="['px-6 py-2 rounded-xl font-medium transition-all', activeTab === 'active' ? 'bg-purple-500 text-white' : 'text-gray-600 hover:bg-gray-100']"
+          :class="['px-6 py-2 rounded-xl font-medium transition-all', activeTab === 'active' ? 'bg-[#00BFAF] text-white' : 'text-gray-600 hover:bg-gray-100']"
         >
           To Do ({{ activeItems.length }})
         </button>
         <button
           @click="activeTab = 'completed'"
-          :class="['px-6 py-2 rounded-xl font-medium transition-all', activeTab === 'completed' ? 'bg-purple-500 text-white' : 'text-gray-600 hover:bg-gray-100']"
+          :class="['px-6 py-2 rounded-xl font-medium transition-all', activeTab === 'completed' ? 'bg-[#00BFAF] text-white' : 'text-gray-600 hover:bg-gray-100']"
         >
           Done ({{ completedItems.length }})
         </button>
@@ -150,7 +150,7 @@ const getPriorityInfo = (priorityValue) => {
           <div class="flex items-start gap-4">
             <button
               @click="toggleComplete(item)"
-              :class="['w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0 mt-1', item.completed ? 'bg-green-500 border-green-500' : 'border-gray-300 hover:border-purple-500']"
+              :class="['w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0 mt-1', item.completed ? 'bg-green-500 border-green-500' : 'border-gray-300 hover:border-[#00BFAF]']"
             >
               <span v-if="item.completed" class="text-white text-sm">✓</span>
             </button>
@@ -159,7 +159,7 @@ const getPriorityInfo = (priorityValue) => {
               <div class="flex items-start justify-between gap-4 mb-2">
                 <div class="flex items-center gap-3 flex-1">
                   <span class="text-2xl">{{ getCategoryInfo(item.category).icon }}</span>
-                  <h3 :class="['text-lg font-bold', item.completed ? 'line-through text-gray-500' : 'text-gray-800']">
+                  <h3 :class="['text-lg font-bold', item.completed ? 'line-through text-gray-500' : 'text-[#4A4A4A]']">
                     {{ item.title }}
                   </h3>
                 </div>
@@ -201,7 +201,7 @@ const getPriorityInfo = (priorityValue) => {
         <button
           v-if="activeTab === 'active'"
           @click="openModal"
-          class="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-8 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
+          class="bg-[#00BFAF] text-white px-8 py-3 rounded-xl font-semibold hover:shadow-lg hover:bg-[#009688] transition-all"
         >
           Add Your First Dream
         </button>
@@ -215,60 +215,60 @@ const getPriorityInfo = (priorityValue) => {
       @click.self="showModal = false"
     >
       <div class="bg-white rounded-3xl p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Add to Bucket List</h2>
+        <h2 class="text-2xl font-bold text-[#4A4A4A] mb-6">Add to Bucket List</h2>
 
         <div class="space-y-5">
           <!-- Title -->
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">
+            <label class="block text-sm font-semibold text-[#4A4A4A] mb-2">
               What do you want to do? <span class="text-red-500">*</span>
             </label>
             <input
               v-model="title"
               type="text"
               placeholder="e.g., Visit Paris together, Try skydiving..."
-              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#00BFAF] focus:border-transparent outline-none"
             />
           </div>
 
           <!-- Description -->
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-2">
+            <label class="block text-sm font-semibold text-[#4A4A4A] mb-2">
               Description (Optional)
             </label>
             <textarea
               v-model="description"
               rows="3"
               placeholder="Add more details..."
-              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none resize-none"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#00BFAF] focus:border-transparent outline-none resize-none"
             ></textarea>
           </div>
 
           <!-- Category -->
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-3">Category</label>
+            <label class="block text-sm font-semibold text-[#4A4A4A] mb-3">Category</label>
             <div class="grid grid-cols-2 gap-3">
               <button
                 v-for="cat in bucketListStore.categories"
                 :key="cat.value"
                 @click="category = cat.value"
-                :class="['p-3 rounded-xl border-2 transition-all', category === cat.value ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-gray-300']"
+                :class="['p-3 rounded-xl border-2 transition-all', category === cat.value ? 'border-[#00BFAF] bg-[#E0F7F5]' : 'border-gray-200 hover:border-gray-300']"
               >
                 <div class="text-2xl mb-1">{{ cat.icon }}</div>
-                <div class="text-xs font-medium text-gray-700">{{ cat.label }}</div>
+                <div class="text-xs font-medium text-[#4A4A4A]">{{ cat.label }}</div>
               </button>
             </div>
           </div>
 
           <!-- Priority -->
           <div>
-            <label class="block text-sm font-semibold text-gray-700 mb-3">Priority</label>
+            <label class="block text-sm font-semibold text-[#4A4A4A] mb-3">Priority</label>
             <div class="flex gap-3">
               <button
                 v-for="prio in bucketListStore.priorities"
                 :key="prio.value"
                 @click="priority = prio.value"
-                :class="['flex-1 py-3 rounded-xl border-2 font-medium transition-all', priority === prio.value ? 'border-purple-500 bg-purple-50 text-purple-700' : 'border-gray-200 text-gray-600 hover:border-gray-300']"
+                :class="['flex-1 py-3 rounded-xl border-2 font-medium transition-all', priority === prio.value ? 'border-[#00BFAF] bg-[#E0F7F5] text-[#00BFAF]' : 'border-gray-200 text-gray-600 hover:border-gray-300']"
               >
                 {{ prio.label }}
               </button>
@@ -291,7 +291,7 @@ const getPriorityInfo = (priorityValue) => {
             </button>
             <button
               @click="createItem"
-              class="flex-1 bg-gradient-to-r from-pink-500 to-purple-500 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
+              class="flex-1 bg-[#00BFAF] text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:bg-[#009688] transition-all"
               :disabled="loading"
             >
               {{ loading ? 'Adding...' : 'Add to List' }}
