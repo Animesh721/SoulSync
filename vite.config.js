@@ -14,7 +14,7 @@ export default defineConfig({
         name: 'SoulSync - Couple Date Planner',
         short_name: 'SoulSync',
         description: 'Stay connected across the miles. Schedule dates, share feelings, and dream together.',
-        theme_color: '#a855f7',
+        theme_color: '#00BFAF',
         background_color: '#ffffff',
         display: 'standalone',
         scope: '/',
