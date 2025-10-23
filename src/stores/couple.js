@@ -13,15 +13,15 @@ import {
 import { getToken, onMessage } from 'firebase/messaging'
 
 export const useCoupleStore = defineStore('couple', () => {
-  const coupleCode = ref(localStorage.getItem('coupleCode') || null)
-  const userId = ref(localStorage.getItem('userId') || null)
-  const userEmail = ref(localStorage.getItem('userEmail') || null)
-  const userName = ref(localStorage.getItem('userName') || null)
-  const recoveryCode = ref(localStorage.getItem('recoveryCode') || null)
+  const coupleCode = ref(null)
+  const userId = ref(null)
+  const userEmail = ref(null)
+  const userName = ref(null)
+  const recoveryCode = ref(null)
   const userTimezone = ref(Intl.DateTimeFormat().resolvedOptions().timeZone)
   const partnerInfo = ref(null)
   const partnerLastSeen = ref(null)
-  const fcmToken = ref(localStorage.getItem('fcmToken') || null)
+  const fcmToken = ref(null)
   const notificationPermission = ref(Notification.permission)
   const isLinked = computed(() => !!coupleCode.value && !!userId.value)
   const isPartnerOnline = computed(() => {
@@ -57,12 +57,6 @@ export const useCoupleStore = defineStore('couple', () => {
       userEmail.value = email
       userName.value = name
       recoveryCode.value = newRecoveryCode
-
-      localStorage.setItem('coupleCode', code)
-      localStorage.setItem('userId', newUserId)
-      localStorage.setItem('userEmail', email)
-      localStorage.setItem('userName', name)
-      localStorage.setItem('recoveryCode', newRecoveryCode)
 
       return { code, recoveryCode: newRecoveryCode }
     } catch (error) {
@@ -105,12 +99,6 @@ export const useCoupleStore = defineStore('couple', () => {
       userEmail.value = email
       userName.value = name
       recoveryCode.value = coupleData.recoveryCode
-
-      localStorage.setItem('coupleCode', code)
-      localStorage.setItem('userId', newUserId)
-      localStorage.setItem('userEmail', email)
-      localStorage.setItem('userName', name)
-      localStorage.setItem('recoveryCode', coupleData.recoveryCode)
 
       return { success: true, recoveryCode: coupleData.recoveryCode }
     } catch (error) {
@@ -160,12 +148,6 @@ export const useCoupleStore = defineStore('couple', () => {
       userEmail.value = userData.email
       userName.value = userData.name
       recoveryCode.value = foundCouple.recoveryCode
-
-      localStorage.setItem('coupleCode', foundCouple.id)
-      localStorage.setItem('userId', foundUserId)
-      localStorage.setItem('userEmail', userData.email)
-      localStorage.setItem('userName', userData.name)
-      localStorage.setItem('recoveryCode', foundCouple.recoveryCode)
 
       // Update last seen
       await updateDoc(doc(db, 'couples', foundCouple.id), {
@@ -234,7 +216,6 @@ export const useCoupleStore = defineStore('couple', () => {
 
         if (token) {
           fcmToken.value = token
-          localStorage.setItem('fcmToken', token)
 
           // Save token to user profile in Firestore
           if (coupleCode.value && userId.value) {
@@ -282,13 +263,8 @@ export const useCoupleStore = defineStore('couple', () => {
     userId.value = null
     userEmail.value = null
     userName.value = null
+    recoveryCode.value = null
     partnerInfo.value = null
-
-    localStorage.removeItem('coupleCode')
-    localStorage.removeItem('userId')
-    localStorage.removeItem('userEmail')
-    localStorage.removeItem('userName')
-    // Keep recovery code for recovery
   }
 
   // Helper functions
