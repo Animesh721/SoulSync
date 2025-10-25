@@ -13,16 +13,30 @@ import {
 import { getToken, onMessage } from 'firebase/messaging'
 
 export const useCoupleStore = defineStore('couple', () => {
-  const coupleCode = ref(localStorage.getItem('coupleCode') || null)
-  const userId = ref(localStorage.getItem('userId') || null)
-  const userEmail = ref(localStorage.getItem('userEmail') || null)
-  const userName = ref(localStorage.getItem('userName') || null)
-  const recoveryCode = ref(localStorage.getItem('recoveryCode') || null)
+  const coupleCode = ref(null)
+  const userId = ref(null)
+  const userEmail = ref(null)
+  const userName = ref(null)
+  const recoveryCode = ref(null)
   const userTimezone = ref(Intl.DateTimeFormat().resolvedOptions().timeZone)
   const partnerInfo = ref(null)
   const partnerLastSeen = ref(null)
-  const fcmToken = ref(localStorage.getItem('fcmToken') || null)
-  const notificationPermission = ref(Notification.permission)
+  const fcmToken = ref(null)
+  const notificationPermission = ref(typeof Notification !== 'undefined' ? Notification.permission : 'default')
+
+  // Initialize from localStorage safely
+  try {
+    if (typeof localStorage !== 'undefined') {
+      coupleCode.value = localStorage.getItem('coupleCode') || null
+      userId.value = localStorage.getItem('userId') || null
+      userEmail.value = localStorage.getItem('userEmail') || null
+      userName.value = localStorage.getItem('userName') || null
+      recoveryCode.value = localStorage.getItem('recoveryCode') || null
+      fcmToken.value = localStorage.getItem('fcmToken') || null
+    }
+  } catch (error) {
+    console.error('Error accessing localStorage:', error)
+  }
   const isLinked = computed(() => !!coupleCode.value && !!userId.value)
   const isPartnerOnline = computed(() => {
     if (!partnerLastSeen.value) return false

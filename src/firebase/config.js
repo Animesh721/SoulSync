@@ -14,20 +14,41 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID
 }
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig)
+// Initialize Firebase with error handling
+let app, db, auth
 
-// Initialize services
-export const db = getFirestore(app)
-export const auth = getAuth(app)
-
-// Initialize Firebase Cloud Messaging (only if supported)
-let messaging = null
-isSupported().then(supported => {
-  if (supported) {
-    messaging = getMessaging(app)
+try {
+  if (!firebaseConfig.apiKey) {
+    throw new Error('Firebase configuration is missing. Please check environment variables.')
   }
-})
+  app = initializeApp(firebaseConfig)
+  db = getFirestore(app)
+  auth = getAuth(app)
+} catch (error) {
+  console.error('Firebase initialization error:', error)
+  // Create minimal fallback to prevent app crash
+  app = null
+  db = null
+  auth = null
+}
+
+export { db, auth }
+
+// Initialize Firebase Cloud Messaging (only if supported and app initialized)
+let messaging = null
+if (app) {
+  isSupported().then(supported => {
+    if (supported) {
+      try {
+        messaging = getMessaging(app)
+      } catch (error) {
+        console.error('Error initializing messaging:', error)
+      }
+    }
+  }).catch(error => {
+    console.error('Error checking messaging support:', error)
+  })
+}
 
 export { messaging }
 export default app
